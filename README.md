@@ -1,6 +1,8 @@
-# OCE Acquisition Protocol Simulator
+# OCE_AcquisitionProtocols_Simulator
 
-A MATLAB simulation framework for designing and comparing **acquisition protocols for wave-based Optical Coherence Elastography (OCE)**. It covers the conventional and **Multimeridian MB mode** and the **Synchronized BM-mode (SBM)** protocol proposed in the thesis. It answers one question: *for a given scan pattern and timing, how well can the phase-speed (stiffness) map be recovered?*
+A MATLAB simulation framework for designing and comparing **acquisition protocols for wave-based Optical Coherence Elastography (OCE)**. It covers the conventional and **Multimeridian MB mode** and the novel **Synchronized BM-mode (SBM)** protocol proposed in the thesis. It answers one question: *for a given scan pattern and timing, how well can the phase-speed (stiffness) map be recovered?*
+
+> **About SBM:** the Synchronized BM-mode protocol is a **novel acquisition protocol** introduced in this thesis. It has **not yet been published** in a peer-reviewed journal. Please cite the thesis if you use or build on it.
 
 Developed in the undergraduate thesis of **Estéfano Machado Ferrer**, under the supervision of Prof. Fernando Zvietcovich, PhD, at the Biophotonics and Biomedical Optics Research Group (GIBIO), Pontificia Universidad Católica del Perú.
 
@@ -33,7 +35,7 @@ Developed in the undergraduate thesis of **Estéfano Machado Ferrer**, under the
 | Protocol | Scan pattern | How the wave is captured |
 |---|---|---|
 | **Multimeridian MB mode** | M-B scans along N meridians through the excitation source | each meridian is an M-mode B-scan; the meridians are interpolated into an en-face map |
-| **Synchronized BM mode (SBM)** | ordinary raster BM scan, repeated over N_F frames | the scan is locked to the excitation so each frame samples every pixel at a slightly later phase; stacking frames reconstructs the 2D wavefield in equivalent time |
+| **Synchronized BM mode (SBM)** (novel, unpublished) | ordinary raster BM scan, repeated over N_F frames | the scan is locked to the excitation so each frame samples every pixel at a slightly later phase; stacking frames reconstructs the 2D wavefield in equivalent time |
 
 ### Simulation cases
 
