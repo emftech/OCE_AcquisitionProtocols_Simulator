@@ -12,3 +12,4 @@ Results/
 *.log
 # OS
 .DS_Store
+*.gif

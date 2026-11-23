@@ -42,7 +42,7 @@ SBM_Protocol_OCE/
 ## Quick start
 
 1. Clone the repository and install k-Wave in `Codes/k-Wave/`.
-2. Set MATLAB's current folder to **the repository root** before running a live script. The first section adds `./Codes` and all its subfolders (including `Codes/k-Wave`) to the path, and results are written to `./Results`. The scripts change folder while saving results, so `cd` back to the repository root before running a script again.
+2. Open a live script from the repository. Its first section finds the repository root (the folder of the open live script, or the current folder), adds `Codes/` and all its subfolders (including `Codes/k-Wave`) to the path, and writes results under `Results/` with full paths, so the current folder never changes. If you run the script outside the Live Editor, set the current folder to the repository root first.
 3. Run a live script, e.g. `Sampling_Acq_Sim_SBM_v4_Ideal.mlx`. Each section is documented (simulation, acquisition vectors, sampling, recovery, PG and PG-TV estimation, metrics).
 4. For the batch study, run `Batch_Simulations/Run_AcqSim_Batch.m`, then `Batch_Simulations/Analyze_AcqSim_Batch.m`. Outputs are written to `Results/` (ignored by git).
 
