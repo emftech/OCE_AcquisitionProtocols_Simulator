@@ -6,7 +6,7 @@ A MATLAB simulation framework for designing and comparing **acquisition protocol
 
 Developed in the undergraduate thesis of **Estéfano Machado Ferrer**, under the supervision of Prof. Fernando Zvietcovich, PhD, at the Biophotonics and Biomedical Optics Research Group (GIBIO), Pontificia Universidad Católica del Perú.
 
-> **Thesis:** E. Machado Ferrer, *Development of an Acquisition Protocol for Non-Cylindrical Wave Propagation in Wave-Based OCE*, PUCP, 2026. PDF in [`docs/`](docs/).
+> **Thesis:** E. Machado Ferrer, *Development of an Acquisition Protocol for Non-Cylindrical Wave Propagation in Wave-Based OCE*, PUCP, 2026. PDF: [`docs/Machado_2026_Thesis_Acquisition_Protocol_NonCylindrical_WaveBased_OCE.pdf`](docs/Machado_2026_Thesis_Acquisition_Protocol_NonCylindrical_WaveBased_OCE.pdf).
 >
 > This repository is **simulation only**. The hardware implementation on a real OCT system (scan-pattern generator, LabVIEW integration and processing of experimental data) is in the companion repository **[OCE_Experimental_Protocols](https://github.com/emftech/OCE_Experimental_Protocols)**.
 
