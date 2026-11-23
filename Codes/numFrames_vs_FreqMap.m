@@ -36,7 +36,7 @@ figure,
 plot(f_285us,N_frames_285us, 'bo','MarkerSize',5)
 hold on
 plot(f_250us, N_frames_250us, 'ro','MarkerSize',5)
-plot(f_260us, N_frames_250us, 'mo','MarkerSize',5)
+plot(f_260us, N_frames_260us, 'mo','MarkerSize',5)
 plot(f_270us, N_frames_270us, 'ko','MarkerSize',5)
 plot(f_300us, N_frames_300us, 'go','MarkerSize',5)
 xlabel('Frequency [Hz]')
