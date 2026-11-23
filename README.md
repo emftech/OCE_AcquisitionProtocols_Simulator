@@ -84,18 +84,46 @@ Developed in the undergraduate thesis of **Estéfano Machado Ferrer**, under the
 
 ## Representative results
 
+All figures are from the final thesis manuscript (chapter numbers in the file names). Simulations use a non-cylindrical medium with a low-speed elliptical inclusion; "saccadic" means simulated lateral eye motion during acquisition.
+
+**Simulation framework**
+
+![Simulation framework](figures/Ch3_Fig_SimFramework_BlockDiagram.png)
+
+Wave propagation (k-Wave) → acquisition vectors → sampling, with optional motion artifacts → phase-speed estimation.
+
+![Non-cylindrical wave propagation](figures/Ch3_Fig_NonCylindrical_Harmonic.png)
+
+Non-cylindrical harmonic propagation: ground-truth speed map, space-time map and wavefield snapshots showing wavefront distortion and scattering at the inclusion.
+
+**The SBM protocol**
+
+![SBM concept](figures/Ch5_Fig_SBM_Framework.png)
+
+Consecutive raster BM frames are acquired with progressively increasing delays relative to the harmonic excitation. Stacking them reconstructs the temporal evolution at every pixel: MB-like temporal sampling with BM-like dense spatial sampling.
+
 | | |
 |---|---|
-| ![Acquisition phase maps](figures/Acq_Phase_Maps.png) | ![Non-cylindrical wave propagation](figures/NonCylindrical_Elastic_WaveProp_Snapshots.png) |
-| Acquisition phase of every pixel for the scan protocol | Simulated non-cylindrical wave propagation (ground truth) |
-| ![Raw sampled frames](figures/Sampled_Frames_NonCylindrical_Raw_Snapshots.png) | ![Compensated sampled frames](figures/Sampled_Frames_NonCylindrical_Compensated_Snapshots.png) |
-| Sampled frames before phase compensation | Sampled frames after phase compensation |
-| ![Recovered frames](figures/Recovered_Frames_Snapshots_NonCylindrical.png) | ![Phase comparison](figures/Phase_Comparison_NonCylindrical.png) |
-| Recovered wavefield with SBM | Recovered vs. ideal phase |
-| ![Phase difference](figures/Phase_Diff_Maps_NonCylindrical.png) | ![Recovery without synchronization](figures/Recovery_NoSync.png) |
-| Phase-difference maps | Recovery without synchronization, for comparison |
+| ![SBM phase compensation](figures/Ch5_Fig_SBM_PhaseCompensation.png) | ![SBM recovered frames](figures/Ch5_Fig_SBM_RecoveredFramesSnapshots_NonCyl.png) |
+| Phase compensation: the raster-induced acquisition phase φ_acq(x, y) is removed pixel by pixel, restoring the wavefront | Recovered SBM frames for the non-cylindrical case, interpolated onto a 100 × 100 grid |
 
-More figures, the MB vs. SBM comparison and the full metrics are in the thesis.
+**Elastograms**
+
+| | |
+|---|---|
+| ![MB elastograms](figures/Ch4_Fig_MB_Elastograms_2DPG.png) | ![SBM elastograms](figures/Ch5_Fig_SBM_Elastograms_2DPG.png) |
+| Multimeridian MB mode, 2D PG and 2D PG-TV, ideal and saccadic, for 4, 8, 16 and 32 meridians | SBM, 2D PG and 2D PG-TV, ideal and saccadic, for 11, 21, 41 and 81 B-scans |
+
+**MB vs. SBM comparison**
+
+| | |
+|---|---|
+| ![Ea ideal](figures/Ch6_Fig_MB_vs_SBM_Ea_Heatmap_Ideal.png) | ![Ea saccades](figures/Ch6_Fig_MB_vs_SBM_Ea_Heatmap_Saccades.png) |
+| Global accuracy error E_a, ideal acquisition | Global accuracy error E_a, with saccades: the 2D estimators stay accurate while the 1D ones degrade |
+| ![CNR saccades](figures/Ch6_Fig_MB_vs_SBM_CNR_Heatmap_Saccades.png) | ![Spatial resolution broadening](figures/Ch6_Fig_SpatialResBroadening_Saccades.png) |
+| Contrast-to-noise ratio with saccades: SBM keeps high CNR and outperforms MB | Inclusion-width broadening (PW50 − W_true) with saccades: SBM with 21 B-scans is comparable to denser rasters at a much shorter acquisition time |
+
+Full results, including precision error, spatial resolution and the ideal-case CNR, are in the thesis.
 
 ## Citation
 
