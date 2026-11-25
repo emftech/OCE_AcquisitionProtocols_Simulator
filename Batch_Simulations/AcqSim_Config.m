@@ -16,9 +16,12 @@ function cfg = AcqSim_Config()
 %   - 12 x 12 mm domain (FOV of the new acquisitions, from 25-11-2026).
 %     The earlier 18 x 18 mm batch is reproduced with cfg.FOV_mm = 18 and
 %     the *_Runs_Legacy lists below.
-%   - Gaussian source FWHM = new needle width measured on the crosshair
-%     B-mode of 20-10-2026 (10 x 10 mm scan, 300 A-scans per B-scan):
-%     shadow edges at A-scans 89.5 and 195.8 -> 106.3 A-scans -> 3.54 mm.
+%   - Gaussian source FWHM = 0.65 mm: diameter of the thin needle used
+%     since the 14-11-2026 acquisitions (Mitutoyo caliper, 25-11-2026).
+%     Legacy value 3.54 mm (thick needle, shadow width on the crosshair
+%     B-mode of 20-10-2026) for the 18 x 18 mm batch of 20-10-2026.
+%   - Near-field blanking floor 1.5 mm = NeedleRadius_mm of the experimental
+%     processing of the 14-11 / 25-11 thin-needle data (legacy batch: 1.2).
 %
 % Run lists (one noise-free repetition per unique pair; repeats in the logs
 % only matter for the experiments)
@@ -42,7 +45,7 @@ cfg.c_ref        = 10.54;    % [m/s] PC phantom reference (Rayleigh)
 cfg.rho          = 1000;     % [kg/m^3]
 cfg.alpha        = 0;        % [dB/m] no attenuation (thesis cylindrical case)
 cfg.A_Peak       = 1;
-cfg.SourceFWHM_mm = 3.54;    % [mm] new needle width (see header)
+cfg.SourceFWHM_mm = 0.65;    % [mm] thin needle, 25-11-2026 caliper (legacy 3.54, see header)
 
 %% Grid / clock
 cfg.Ts_OCT  = 5e-6;          % [s] 200 kHz A-line clock
@@ -64,12 +67,15 @@ cfg.MarginPx = 10;           % background disk margin (thesis)
 % (Cfg.NeedleRadius_mm): samples closer than R to the needle tip are set to
 % NaN BEFORE the estimators, the same disk is removed from every map, and
 % it is drawn gray in S-T maps / videos and darkest-turbo in elastograms.
-% R = max(1.2 mm, 2*sqrt(2)*sigma_s) = source support (4.25 mm for the
-% 3.54 mm needle, 1.2 mm = experiments' old-needle value for 0.30 mm).
-cfg.Source_mm          = [0 0];                     % needle tip (scan centre)
-cfg.NeedleRadius_mm    = AcqSim_NeedleRadius(cfg.SourceFWHM_mm);
+% R = max(floor, 2*sqrt(2)*sigma_s) = source support. Floor 1.5 mm = the
+% experimental NeedleRadius_mm of the 14-11 / 25-11 thin-needle processing,
+% so R = 1.5 mm for both 0.65 and 0.30 mm (support 0.78 / 0.36 mm).
+% Legacy 18 mm batch: floor 1.2 mm -> 4.25 mm (3.54 mm needle), 1.2 mm (0.30 mm).
+cfg.Source_mm            = [0 0];                   % needle tip (scan centre)
+cfg.NeedleRadiusFloor_mm = 1.5;                     % [mm] experimental thin-needle blanking (legacy 1.2)
+cfg.NeedleRadius_mm      = AcqSim_NeedleRadius(cfg.SourceFWHM_mm, cfg.NeedleRadiusFloor_mm);
 cfg.NeedleExclusion_mm = cfg.NeedleRadius_mm;       % annulus ROI = blanked region (experimental metric ROI)
-% Far-field ROI = R + half the 11 px PG kernel (~1 mm at 18 mm / 100 px):
+% Far-field ROI = R + 1 mm (~half the 11 px PG kernel at 18 mm / 100 px; kept at 12 mm):
 % the first ~1 mm outside the blanked disk is biased by the interpolation
 % bridge and by kernels straddling the disk edge (rim check, and the MB
 % session's experimental-chain check: 17.2 -> 12.6 -> 10.85 m/s in 0.5 mm rings).

@@ -16,7 +16,7 @@ function W = AcqSim_WaveProp(cfg, T_excitation, protocol)
 %                       "Causal" excitation: the source runs before the
 %                       acquisition, and the video is clipped at an absolute
 %                       k-Wave sample that is (i) after the wave filled the
-%                       18 mm domain and (ii) an integer multiple of
+%                       cfg.FOV_mm domain and (ii) an integer multiple of
 %                       P = T_exc/Ts, so video t = 0 is phase 0 of the
 %                       steady-state excitation (scan starts at phase 0
 %                       because startDelay = P - ExcPulseWidth).

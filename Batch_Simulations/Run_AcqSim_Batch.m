@@ -4,13 +4,16 @@
 % Date of creation (DD/MM/YY): 20-10-2026
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Bulk, experiment-matched simulations of the Multimeridian MB mode (QH,
-% 3 cycles) and SBM (causal harmonic) protocols on an 18 x 18 mm
-% homogeneous medium (c = 10.54 m/s). One k-Wave video per period and
-% protocol, then every acquisition pattern of the logs for that period.
+% 3 cycles) and SBM (causal harmonic) protocols on a cfg.FOV_mm x cfg.FOV_mm
+% (12 x 12 mm since 25-11-2026) homogeneous medium (c = 10.54 m/s). One
+% k-Wave video per period and protocol, then every acquisition pattern of
+% the logs for that period.
 %
 % Source sets:
-%   - FWHM 3.54 mm : new needle (main results)
-%   - FWHM 0.30 mm : thesis source (control: isolates the needle-size effect)
+%   - FWHM 0.65 mm : thin needle used since 14-11-2026 (main results)
+%   - FWHM 0.30 mm : thesis point source (control: isolates the needle-size effect)
+% Legacy 18 x 18 mm batch (20-10-2026): FWHM 3.54 mm (thick needle) and
+% 0.30 mm, blanking floor 1.2 mm (Results/Experiment_Matched_18x18mm).
 %
 % After this script: Analyze_AcqSim_Batch.m, then Build_Deck_MB_Sim.m and
 % Build_Deck_SBM_Sim.m.
@@ -23,9 +26,9 @@ AcqSim_SetupPaths(cfg0);
 set(groot, 'DefaultFigureVisible', 'off');
 
 % Optional split into parallel workers (environment variables):
-%   ACQSIM_SETS="3.54" | "0.30" | "3.54,0.30"   ACQSIM_PROTOCOLS="MB" | "SBM" | "MB,SBM"
+%   ACQSIM_SETS="0.65" | "0.30" | "0.65,0.30"   ACQSIM_PROTOCOLS="MB" | "SBM" | "MB,SBM"
 % Runs whose last output already exists are skipped (resume after a crash).
-SourceSets_mm = [3.54 0.30];
+SourceSets_mm = [0.65 0.30];
 RunProtocols  = ["MB" "SBM"];
 if ~isempty(getenv('ACQSIM_SETS')),      SourceSets_mm = str2double(split(string(getenv('ACQSIM_SETS')), ',')).'; end
 if ~isempty(getenv('ACQSIM_PROTOCOLS')), RunProtocols  = split(string(getenv('ACQSIM_PROTOCOLS')), ',').'; end
@@ -36,7 +39,7 @@ Log = table();
 for s = 1:numel(SourceSets_mm)
     cfg = cfg0;
     cfg.SourceFWHM_mm = SourceSets_mm(s);
-    cfg.NeedleRadius_mm = AcqSim_NeedleRadius(cfg.SourceFWHM_mm);
+    cfg.NeedleRadius_mm = AcqSim_NeedleRadius(cfg.SourceFWHM_mm, cfg0.NeedleRadiusFloor_mm);
     cfg.NeedleExclusion_mm = cfg.NeedleRadius_mm;
     cfg.results_path  = cfg0.results_path + "/" + sprintf("FWHM_%s_mm", strrep(sprintf('%.2f', SourceSets_mm(s)), '.', 'p'));
     if ~isfolder(cfg.results_path), mkdir(cfg.results_path); end

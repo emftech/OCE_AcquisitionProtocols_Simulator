@@ -6,8 +6,8 @@
 % Metrics (accuracy Ea, precision Ep; no CNR: homogeneous medium) and
 % dispersion analysis of the experiment-matched simulation batch.
 %
-% For every source set (FWHM_3p54_mm = new needle, FWHM_0p30_mm = thesis
-% source) and protocol it writes to <set>/Summary_<protocol>/:
+% For every source set (FWHM_0p65_mm = thin needle, FWHM_0p30_mm = thesis
+% source; legacy 18 mm batch: FWHM_3p54_mm) and protocol it writes to <set>/Summary_<protocol>/:
 %   - <protocol>_Summary_All.xlsx  (one row per run x estimator, 3 ROIs)
 %   - Metrics_vs_Meridians / Metrics_vs_BScans  (.xlsx + thesis-style plots)
 %   - Elastogram grids (rows = pattern, columns = estimator), shared turbo range
@@ -19,7 +19,7 @@
 % and, at the batch root, FWHM_Comparison plots (needle vs thesis source).
 %
 % ROIs: Bkg = thesis disk (R = N/2 - 10 px); Ann = Far = r >= NeedleRadius_mm
-% = max(1.2, 2.83 sigma_s) (experimental near-field blanking radius = source
+% = max(NeedleRadiusFloor_mm, 2.83 sigma_s) (experimental near-field blanking radius = source
 % support). Maps are already blanked inside that disk by the single runs;
 % the near-field radius analysis uses the UNBLANKED Results.OG_WaveProp.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -159,7 +159,7 @@ for s = 1:numel(sets)
             'DisplayName', 'source support radius 2.83\sigma_s = blanking radius');
         xlabel(ax, 'Excitation frequency [kHz]', 'FontWeight', 'bold'); ylabel(ax, 'Radius [mm]', 'FontWeight', 'bold');
         title(ax, {sprintf('%s - near-field (blanking) radius - %s', proto, setLbl), ...
-            'missing points: never within 5 % up to r = 7.6 mm (global bias, see dispersion)'}, 'FontWeight', 'bold');
+            sprintf('missing points: never within 5 %% up to r = %.1f mm (global bias, see dispersion)', 0.85*cfg.FOV_mm/2)}, 'FontWeight', 'bold');
         legend(ax, 'Location', 'best'); grid(ax, 'on'); set(ax, 'FontWeight', 'bold', 'FontSize', 12, 'LineWidth', 1.5);
         fb = fullfile(out, "NearField_Radius");
         savefig(f, fb + ".fig"); exportgraphics(f, fb + ".png", 'Resolution', 150); close(f);
@@ -182,7 +182,7 @@ for proto = ["MB" "SBM"]
     end
     yline(ax, cfg.c_ref, 'k--', 'LineWidth', 1.5, 'DisplayName', 'c_{ref}');
     xlabel(ax, 'Excitation frequency [kHz]', 'FontWeight', 'bold'); ylabel(ax, 'Phase speed [m/s]', 'FontWeight', 'bold');
-    title(ax, sprintf('%s - 2D PG-TV far-field speed: new needle vs thesis source', proto), 'FontWeight', 'bold');
+    title(ax, sprintf('%s - 2D PG-TV far-field speed: needle vs thesis point source', proto), 'FontWeight', 'bold');
     legend(ax, 'Location', 'best'); grid(ax, 'on'); set(ax, 'FontWeight', 'bold', 'FontSize', 12, 'LineWidth', 1.5);
     fb = fullfile(cfg.results_path, "FWHM_Comparison_" + proto);
     savefig(f, fb + ".fig"); exportgraphics(f, fb + ".png", 'Resolution', 150); close(f);
