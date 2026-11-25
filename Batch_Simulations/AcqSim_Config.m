@@ -13,15 +13,17 @@ function cfg = AcqSim_Config()
 %   - Homogeneous medium (cylindrical propagation, no inclusions) with the
 %     Rayleigh speed of the PC reference phantom: c_ref = 10.54 m/s
 %     (quasi-static compression E0 = 0.365 MPa, rho = 1000 kg/m^3).
-%   - 18 x 18 mm domain (new acquisitions, 20-10-2026).
+%   - 12 x 12 mm domain (FOV of the new acquisitions, from 25-11-2026).
+%     The earlier 18 x 18 mm batch is reproduced with cfg.FOV_mm = 18 and
+%     the *_Runs_Legacy lists below.
 %   - Gaussian source FWHM = new needle width measured on the crosshair
 %     B-mode of 20-10-2026 (10 x 10 mm scan, 300 A-scans per B-scan):
 %     shadow edges at A-scans 89.5 and 195.8 -> 106.3 A-scans -> 3.54 mm.
 %
-% Run lists
-%   - MB : Experiment_Log_06_10_2026.xlsx (sheet PH_1150_503_06_10_2026),
-%          one noise-free repetition per (period, meridians) pair.
-%   - SBM: Experiment_Log_SBM_19_10_2026.xlsx (sheet PH_1150_503_SBM),
+% Run lists (one noise-free repetition per unique pair; repeats in the logs
+% only matter for the experiments)
+%   - MB : Experiment_Log_25_11_2026.xlsx (sheet PH_1150_503_25_11_2026).
+%   - SBM: Experiment_Log_SBM_29_11_2026.xlsx (sheet PH_1150_503_SBM_29_11_2026),
 %          N_A = 37, N_P = 4, N_F = P, N_phi = 4, N_turn = smallest
 %          k*P - N_A >= 20, one noise-free repetition per row.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -33,7 +35,6 @@ cfg.root_path    = string(fileparts(fileparts(mfilename("fullpath"))));   % repo
 cfg.codes_path   = cfg.root_path + "/Codes";
 cfg.kwave_path   = cfg.codes_path + "/k-Wave";   % download k-Wave (http://www.k-wave.org) and place it here
 cfg.batch_path   = cfg.root_path + "/Batch_Simulations";
-cfg.results_path = cfg.root_path + "/Results/Experiment_Matched_18x18mm";
 cfg.display_path = cfg.batch_path + "/display_helpers";   % colormaps / plot helpers
 
 %% Medium / source
@@ -45,7 +46,8 @@ cfg.SourceFWHM_mm = 3.54;    % [mm] new needle width (see header)
 
 %% Grid / clock
 cfg.Ts_OCT  = 5e-6;          % [s] 200 kHz A-line clock
-cfg.FOV_mm  = 18;
+cfg.FOV_mm  = 12;          % [mm] new acquisitions (25-11-2026 on); 18 for the legacy batch
+cfg.results_path = cfg.root_path + "/Results/" + sprintf("Experiment_Matched_%dx%dmm", cfg.FOV_mm, cfg.FOV_mm);
 cfg.horizontalMin = -cfg.FOV_mm/2; cfg.horizontalMax = cfg.FOV_mm/2;
 cfg.verticalMin   = -cfg.FOV_mm/2; cfg.verticalMax   = cfg.FOV_mm/2;
 cfg.nPoints = 500;           % same grid size as the thesis (dx = 36 um)
@@ -85,8 +87,15 @@ cfg.MB.nAscans       = 100;  % positions per meridian (log)
 cfg.MB.ExcPulseWidth = 10;
 cfg.MB.AcqPulseWidth = 1;
 cfg.MB.startDelay_samples = 0;
-% [period_us, meridians] pairs from the 06-10-2026 log
+% [period_us, meridians] pairs from the 25-11-2026 log (Sections 1-5)
 cfg.MB.Runs = [ ...
+    285 2; 220 2; ...                                              % S1 re-check
+    220 8; 240 8; 260 8; 280 8; 285 8; 300 8; 320 8; 340 8; ...   % S2 sweep
+    285 4; 285 16; 285 32; ...                                     % S3 (285/8 in S2)
+    500 4; 500 8; 500 16; 500 32; ...                              % S4
+    220 4; 220 16; 220 32];                                        % S5 (220/8 in S2)
+% Legacy: [period_us, meridians] pairs from the 06-10-2026 log (18 x 18 mm)
+cfg.MB.Runs_Legacy = [ ...
     500 2; 220 2; 285 2; ...
     285 4; 285 8; 285 16; 285 32; ...
     500 4; 500 8; 500 16; 500 32; ...
@@ -101,9 +110,17 @@ cfg.SBM.AcqPulseWidth = 10;
 cfg.SBM.N_excitations = 2;   % sim duration only (harmonic source is continuous)
 cfg.SBM.M_repetitions = 200; % sim-duration bookkeeping (thesis defaults)
 cfg.SBM.nSyncSamples  = 50;
-cfg.SBM.SteadyState_s = 1.5e-3; % clip start: after the wave filled the 18 mm domain
-% [period_us, B-scans] pairs from the 19-10-2026 SBM log
+cfg.SBM.SteadyState_s = 1.5e-3; % clip start: after the wave filled the domain (18 mm worst case)
+% [period_us, B-scans] pairs from the 29-11-2026 SBM log, matched to the
+% 25-11 MB plan (meridians 4/8/16/32 -> N_B = 11/21/41/81)
 cfg.SBM.Runs = [ ...
+    285 21; ...                                                    % S1 check
+    220 21; 240 21; 260 21; 280 21; 300 21; 320 21; 340 21; ...   % S2 sweep
+    285 11; 285 41; 285 81; ...                                    % S3
+    500 11; 500 21; 500 41; 500 81; ...                            % S4
+    220 11; 220 41; 220 81];                                       % S5
+% Legacy: [period_us, B-scans] pairs from the 19-10-2026 SBM log (18 x 18 mm)
+cfg.SBM.Runs_Legacy = [ ...
     285 21; ...
     285 11; 285 41; 285 81; ...
     500 21; 220 21; 240 21; 260 21; 280 21; 300 21; 320 21; 340 21];
