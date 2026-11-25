@@ -50,7 +50,7 @@ cfg.FOV_mm  = 12;          % [mm] new acquisitions (25-11-2026 on); 18 for the l
 cfg.results_path = cfg.root_path + "/Results/" + sprintf("Experiment_Matched_%dx%dmm", cfg.FOV_mm, cfg.FOV_mm);
 cfg.horizontalMin = -cfg.FOV_mm/2; cfg.horizontalMax = cfg.FOV_mm/2;
 cfg.verticalMin   = -cfg.FOV_mm/2; cfg.verticalMax   = cfg.FOV_mm/2;
-cfg.nPoints = 500;           % same grid size as the thesis (dx = 36 um)
+cfg.nPoints = 500;           % same grid size as the thesis (dx = 24 um at 12 mm, 36 um at 18 mm)
 
 %% Estimators (thesis settings)
 cfg.kernel_size = 11;
